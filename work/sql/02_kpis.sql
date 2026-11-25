@@ -1,0 +1,4 @@
+-- Purpose: kpis.json rows (all KPI codes, all months, ALL_PLANTS kept as the portfolio value, 2023 backcast included).
+-- Result rows: 5075
+-- Data asset id: 6afc52acbdd8300f408de665 (sync e51d4a70-09fc-4d05-83e0-6eba64f23b74, r1-kpis-20261125-1416)
+SELECT POSTING_MONTH AS MONTH, PLANT_ID, KPI_CODE, KPI_VALUE, KPI_UOM, SCENARIO_LABEL AS SCENARIO FROM VEDANTA_POC.INVENTORY_KPI_MONTHLY ORDER BY POSTING_MONTH, PLANT_ID, KPI_CODE, SCENARIO_LABEL
