@@ -4,3 +4,7 @@ dist
 .claire
 screenshot*.png
 shots/
+
+# test output
+test-results/
+playwright-report/
