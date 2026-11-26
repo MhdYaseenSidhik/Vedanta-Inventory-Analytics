@@ -24,5 +24,14 @@ Note for this ticket (the 3/6/11 horizon variant): the goal asks for predictionL
 - `plan_vs_actual.json`: `variancePct` is null when the plan value is 0 (1,404 of 5,843 rows). Do not treat null as 0.
 - `reorder.json`: `shutdownId` is null for recommendations that are not shutdown driven (3,222 of 3,916 rows).
 - KPI `catalog` labels, directions and definitions are written explicitly in `scripts/build_data.py`; `uom` comes from the source.
-- `forecast.json` and `forecast_holdout.json` are produced by the FORECAST ticket (PR #2); `manifest.forecast` is null until then.
-- Every SQL statement behind these files is in `work/sql/` (01 to 06).
+- Every SQL statement behind the refresh files is in `work/sql/` (01 to 06); the forecast training set and its checks are 07 to 09.
+
+## Notes on the forecast files (FORECAST ticket, horizons 3 / 6 / 11)
+
+- Experiment `6b06f01b16aa18df48697254` (time_series, preset fast, predictionLength 11, primary metric RMSE), trained on asset `6b06d4af5be48659f48aca60` (`work/sql/09_forecast_training.sql`): plant HZL_DEMO_01 only, 5,960 series (ZSPR 3,707 / ZSPN 2,253) x 36 months (2023-01 to 2025-12), target NET_CONSUMPTION_QTY.
+- `forecast_holdout.json` is a **backtest** on the 11 months the model did not see (2025-02 to 2025-12), 65,560 series rows. MAE 5.4769, WAPE 1.1722. **WAPE above 1 means the backtest is no better than predicting zero**; the summed prediction is 0.52x the summed actual. Show this beside any forecast chart.
+- `forecast.json`: `available` true, 2026-01 to 2026-11, `horizons` [3, 6, 11], 65,560 rows (5,960 series x 11), `predicted` = mean, `lower`/`upper` = 0.1/0.9 quantiles, `materialType` on every row. `lower` can be negative (not clipped). `byPlantMonth` holds one plant (HZL_DEMO_01) x 11 months. The 3 / 6 / 11-month view filters `horizon <= 3 | 6 | 11`.
+- Forecast covers plant HZL_DEMO_01 only; every other plant has no forecast.
+- `manifest.forecast.verdict` is `unavailable`: Context Flow's `generalization.verdict` was not read back in this run. `verdictReasons` lists what was measured from the files.
+- Context Flow reports feature importance 0 for all six covariates (incl. MATERIAL_TYPE), so predictions are driven by the target history.
+- `manifest.files[].rows` for the two forecast files counts series rows.
