@@ -38,8 +38,8 @@ export function MaterialDetail({ m, onClose }: { m: MaterialRow; onClose: () => 
   }, [onClose])
 
   const rec = reorder.status === 'ready' ? reorder.data.rows.find((r) => r.materialId === m.materialId && r.plantId === m.plantId) : undefined
-  const bt = holdout.status === 'ready' ? holdout.data.series.filter((r) => r.seriesId === seriesId) : []
-  const fc = forecast.status === 'ready' && forecast.data.available ? forecast.data.rows.filter((r) => r.seriesId === seriesId) : []
+  const bt = useMemo(() => (holdout.status === 'ready' ? holdout.data.series.filter((r) => r.seriesId === seriesId) : []), [holdout, seriesId])
+  const fc = useMemo(() => (forecast.status === 'ready' && forecast.data.available ? forecast.data.rows.filter((r) => r.seriesId === seriesId) : []), [forecast, seriesId])
   const loading = reorder.status === 'loading' || holdout.status === 'loading' || forecast.status === 'loading'
 
   const option = useMemo(() => {
