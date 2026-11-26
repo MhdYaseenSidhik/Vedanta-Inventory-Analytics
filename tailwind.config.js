@@ -38,6 +38,7 @@ export default {
       borderRadius: { sm: 'var(--radius-sm)', md: 'var(--radius-md)', DEFAULT: 'var(--radius-md)', lg: 'var(--radius-md)' },
       boxShadow: { 1: 'var(--shadow-1)', 2: 'var(--shadow-2)', 3: 'var(--shadow-3)' },
       height: { control: 'var(--control-h)' },
+      width: { control: 'var(--control-h)' },
       minHeight: { control: 'var(--control-h)' },
       maxWidth: { page: 'var(--page-max)' },
       transitionDuration: { DEFAULT: 'var(--motion-duration)' },

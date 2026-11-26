@@ -23,7 +23,7 @@ export function Select({ label, value, onChange, options, className = '' }: { la
 /** Segmented control (radio group) for small fixed choices such as the horizon. */
 export function Segmented({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: Opt[] }) {
   return (
-    <div role="radiogroup" aria-label={label} className="inline-flex rounded-md border border-line/20 bg-sunken p-0.5">
+    <div role="radiogroup" aria-label={label} className="inline-flex divide-x divide-line/15 overflow-hidden rounded-md border border-line/20 bg-surface shadow-1">
       {options.map((o) => {
         const on = o.value === value
         return (
@@ -33,7 +33,7 @@ export function Segmented({ label, value, onChange, options }: { label: string; 
             role="radio"
             aria-checked={on}
             onClick={() => onChange(o.value)}
-            className={`h-[calc(var(--control-h)-0.25rem)] min-w-[2.75rem] rounded-sm px-3 text-sm font-medium transition-colors ${on ? 'bg-surface text-ink shadow-1' : 'text-muted hover:text-ink'}`}
+            className={`h-control min-w-[2.75rem] px-3 text-sm font-medium transition-colors ${on ? 'bg-accent-soft font-semibold text-accent' : 'text-muted hover:bg-sunken hover:text-ink'}`}
           >
             {o.label}
           </button>

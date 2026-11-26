@@ -34,9 +34,11 @@ function ForecastBody({ fc, plantsMsg, onOpen }: { fc: ForecastFile; plantsMsg: 
           Material type
           <Segmented label="Material type" value={f.type} onChange={(v) => update({ type: v })} options={[{ value: '', label: 'All' }, { value: 'ZSPR', label: 'ZSPR' }, { value: 'ZSPN', label: 'ZSPN' }]} />
         </div>
-        <p className="pb-2 text-sm text-muted">
-          Covers <strong className="text-ink">{months.length ? `${formatMonth(months[0])} to ${formatMonth(months[months.length - 1])}` : 'no months'}</strong> · {h}-month horizon · 10–90% band on the material table
-        </p>
+        {months.length > 0 && (
+          <p className="pb-2 text-sm text-muted">
+            Covers <strong className="text-ink">{`${formatMonth(months[0])} to ${formatMonth(months[months.length - 1])}`}</strong> · {h}-month horizon · 10–90% band on the material table
+          </p>
+        )}
       </div>
       <Notice tone="info">
         {plantsMsg} The forecast covers plant HZL_DEMO_01 only and always shows its full horizon, so the criticality and month-range filters do not apply to it (the month range does apply to the backtest below).

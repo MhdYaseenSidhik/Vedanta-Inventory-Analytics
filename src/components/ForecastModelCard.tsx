@@ -36,7 +36,7 @@ export function ForecastModelCard() {
           <Item k="Trained" v={formatDate(m.experimentCreatedAt.slice(0, 10))} />
         </dl>
         <details className="mt-3 text-sm">
-          <summary className="cursor-pointer rounded-sm text-accent">Model quality notes (generalization verdict: {m.verdict.split(' ')[0]})</summary>
+          <summary className="flex min-h-control cursor-pointer items-center rounded-sm text-accent transition-colors hover:text-ink">Model quality notes (generalization verdict: {m.verdict.split(' ')[0]})</summary>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-muted">
             {m.verdictReasons.map((r) => (
               <li key={r}>{r}</li>

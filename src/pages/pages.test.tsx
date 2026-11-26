@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { App } from '../app/App'
 import { clearDatasetCache } from '../data/loader'
 import type { Dims, ForecastFile, ForecastHoldoutFile, InventorySummaryFile, KpisFile, Manifest, MaterialsFile, PlanActualFile, ReorderFile } from '../data/types'
@@ -107,6 +107,21 @@ describe('screens render with fixture data', () => {
     await open('plan')
     expect(await screen.findByRole('heading', { name: 'Plan vs actual' })).toBeInTheDocument()
     await waitFor(() => expect(screen.getByText('By material group')).toBeInTheDocument())
+  })
+  it('design review: skip link, collapsible phone filters, heading levels, labelled definition buttons', async () => {
+    await open('overview', '?type=ZSPR')
+    await screen.findByRole('heading', { name: 'Overview' })
+    expect(screen.getByRole('link', { name: 'Skip to content' })).toHaveAttribute('href', '#main')
+    const toggle = screen.getByRole('button', { name: /Filters/ })
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(toggle).toHaveTextContent('1 active')
+    fireEvent.click(toggle)
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    // sections sit directly under the h1, so panel and tile titles are level 2
+    expect(screen.getAllByRole('heading', { level: 2, name: 'Gross inventory value' }).length).toBe(1)
+    expect(screen.queryAllByRole('heading', { level: 3 }).length).toBe(0)
+    // the definition info is a real button with a name, not a bare icon
+    expect(screen.getAllByRole('button', { name: /Definition:/ }).length).toBeGreaterThan(0)
   })
   it('schema mismatch shows an error naming the versions', async () => {
     files.manifest = { ...manifest, schemaVersion: 2 }

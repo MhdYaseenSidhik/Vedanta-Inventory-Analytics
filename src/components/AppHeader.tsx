@@ -19,6 +19,9 @@ export function AppHeader() {
   const [theme, toggle] = useTheme()
   return (
     <header className="sticky top-0 z-30 border-b border-line/10 bg-surface/95 backdrop-blur">
+      <a href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus() }} className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 focus:z-40 focus:rounded-md focus:bg-accent focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-accent-ink">
+        Skip to content
+      </a>
       <div className="mx-auto flex max-w-page items-center justify-between gap-3 px-4 py-3">
         <div className="min-w-0">
           <p className="truncate text-base font-semibold text-ink">Inventory control</p>

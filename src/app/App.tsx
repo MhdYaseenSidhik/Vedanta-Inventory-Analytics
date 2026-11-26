@@ -44,7 +44,7 @@ function Shell() {
     <>
       <AppHeader />
       <FilterBar />
-      <main id="main" className="mx-auto max-w-page px-4 py-6">
+      <main id="main" tabIndex={-1} className="mx-auto max-w-page px-4 py-6 focus:outline-none">
         <Screen />
       </main>
     </>

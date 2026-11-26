@@ -11,10 +11,10 @@ export function KpiTile({ s, asOf, compact = false }: { s: KpiSummary; asOf: str
   return (
     <article className="flex min-w-0 flex-col gap-2 rounded-md border border-line/10 bg-surface p-4 shadow-1" aria-label={entry.label}>
       <header className="flex items-start justify-between gap-2">
-        <h3 className="text-sm font-medium text-muted">{entry.label}</h3>
-        <span title={title} className="shrink-0 text-subtle" tabIndex={0} role="img" aria-label={`Definition: ${entry.definition}`}>
+        <h2 className="text-sm font-medium text-muted">{entry.label}</h2>
+        <button type="button" title={title} className="-m-2 flex h-control w-control shrink-0 items-center justify-center rounded-md text-subtle transition-colors hover:text-ink" aria-label={`Definition: ${entry.definition}`}>
           <Info aria-hidden className="h-4 w-4" />
-        </span>
+        </button>
       </header>
       <p className="text-xl font-semibold text-ink" title={formatKpiFull(s.value, entry.uom)}>
         {s.value === null ? <span className="text-subtle">No data</span> : formatKpi(s.value, entry.uom)}
