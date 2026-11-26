@@ -1,0 +1,139 @@
+/*
+ * Design tokens. Direction: "Stripe-dense, calm" - neutral slate surfaces, one blue accent,
+ * semantic colours only where they carry meaning. Components never hard-code a colour,
+ * size or spacing value; Tailwind is mapped to these variables in tailwind.config.js.
+ * Colours are space-separated RGB triplets so Tailwind opacity modifiers work.
+ */
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+  --canvas: 244 246 250;
+  --surface: 255 255 255;
+  --raised: 255 255 255;
+  --sunken: 238 241 246;
+  --line: 15 23 42;
+  --ink: 15 23 42;
+  --muted: 71 85 105;
+  --subtle: 100 116 139;
+  --accent: 37 99 235;
+  --accent-ink: 255 255 255;
+  --accent-soft: 232 241 255;
+  --success: 21 128 61;
+  --success-soft: 220 252 231;
+  --warning: 180 83 9;
+  --warning-soft: 254 243 199;
+  --danger: 185 28 28;
+  --danger-soft: 254 226 226;
+  --info: 3 105 161;
+  --info-soft: 224 242 254;
+  /* categorical series palette, 8 hues, distinguishable in both themes */
+  --series-1: 37 99 235;
+  --series-2: 13 148 136;
+  --series-3: 217 119 6;
+  --series-4: 147 51 234;
+  --series-5: 225 29 72;
+  --series-6: 101 163 13;
+  --series-7: 8 145 178;
+  --series-8: 100 116 139;
+  --shadow-1: 0 1px 2px rgb(15 23 42 / 0.06);
+  --shadow-2: 0 2px 8px rgb(15 23 42 / 0.08);
+  --shadow-3: 0 8px 24px rgb(15 23 42 / 0.14);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --canvas: 2 6 23;
+  --surface: 12 18 34;
+  --raised: 22 31 52;
+  --sunken: 6 11 26;
+  --line: 148 163 184;
+  --ink: 241 245 249;
+  --muted: 160 174 196;
+  --subtle: 128 143 168;
+  --accent: 96 165 250;
+  --accent-ink: 2 6 23;
+  --accent-soft: 23 37 84;
+  --success: 74 222 128;
+  --success-soft: 5 46 22;
+  --warning: 251 191 36;
+  --warning-soft: 69 39 4;
+  --danger: 248 113 113;
+  --danger-soft: 69 10 10;
+  --info: 56 189 248;
+  --info-soft: 8 47 73;
+  --series-1: 96 165 250;
+  --series-2: 45 212 191;
+  --series-3: 251 191 36;
+  --series-4: 192 132 252;
+  --series-5: 251 113 133;
+  --series-6: 163 230 53;
+  --series-7: 34 211 238;
+  --series-8: 148 163 184;
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-2: 0 2px 8px rgb(0 0 0 / 0.45);
+  --shadow-3: 0 8px 24px rgb(0 0 0 / 0.55);
+}
+
+:root {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* type scale 12 / 14 / 16 / 20 / 24 / 32 */
+  --text-xs: 0.75rem;
+  --leading-xs: 1rem;
+  --text-sm: 0.875rem;
+  --leading-sm: 1.25rem;
+  --text-base: 1rem;
+  --leading-base: 1.5rem;
+  --text-lg: 1.25rem;
+  --leading-lg: 1.75rem;
+  --text-xl: 1.5rem;
+  --leading-xl: 2rem;
+  --text-2xl: 2rem;
+  --leading-2xl: 2.5rem;
+
+  /* spacing scale, 4px base */
+  --space-0: 0px;
+  --space-px: 1px;
+  --space-0_5: 0.125rem;
+  --space-1: 0.25rem;
+  --space-1_5: 0.375rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --control-h: 2.25rem;
+  --page-max: 80rem;
+  --col-min: 6rem;
+  --chart-h: 20rem;
+  --chart-h-sm: 14rem;
+  --row-h: 2.5rem;
+  --table-h: 28rem;
+  --spark-h: 2rem;
+
+  --motion-duration: 180ms;
+  --motion-ease: cubic-bezier(0.2, 0, 0, 1);
+  --ring-width: 2px;
+  --ring-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --control-h: 2.5rem; /* 40px touch target on phones */
+    --chart-h: 16rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration: 0ms;
+  }
+}
