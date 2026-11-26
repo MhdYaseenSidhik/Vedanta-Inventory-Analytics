@@ -4,3 +4,5 @@ dist
 .claire
 screenshot*.png
 shots/
+.env
+.env.local
