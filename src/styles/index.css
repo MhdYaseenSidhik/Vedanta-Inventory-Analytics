@@ -1,0 +1,58 @@
+@import './tokens.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-canvas text-ink text-sm antialiased;
+    font-variant-numeric: tabular-nums;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+  :focus-visible {
+    outline: var(--ring-width) solid rgb(var(--accent));
+    outline-offset: var(--ring-offset);
+    border-radius: var(--radius-sm);
+  }
+  button, select, input {
+    font: inherit;
+    color: inherit;
+  }
+  h1, h2, h3 {
+    @apply font-semibold text-ink;
+  }
+}
+
+@layer components {
+  .num {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .ctl {
+    @apply h-control rounded-md border border-line/20 bg-surface px-3 text-sm text-ink shadow-1 transition-colors;
+  }
+  .ctl:hover {
+    @apply border-line/40;
+  }
+  .ctl:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+  .btn {
+    @apply inline-flex h-control items-center justify-center gap-2 rounded-md border border-line/20 bg-surface px-3 text-sm font-medium text-ink shadow-1 transition-colors;
+  }
+  .btn:hover {
+    @apply bg-sunken;
+  }
+  .btn-primary {
+    @apply border-transparent bg-accent text-accent-ink;
+  }
+  .btn-primary:hover {
+    @apply bg-accent/90;
+  }
+}
