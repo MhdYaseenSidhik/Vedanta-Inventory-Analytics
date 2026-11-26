@@ -15,3 +15,14 @@ Written by the Inventory Data Agent. The dashboard reads these static JSON files
 Conventions: numbers are JSON numbers, dates YYYY-MM-DD, months YYYY-MM, missing values null. Files over 1 MB are compact JSON. 2023 is a fabricated backcast year (IS_BACKCAST_PERIOD = 'Y') and is included.
 
 Note for this ticket (the 3/6/11 horizon variant): the goal asks for predictionLength 11, so the forecast ticket publishes horizons [3, 6, 11].
+
+## Notes on this refresh (asOf 2025-12-31, 2023 backcast included)
+
+- `manifest.files[].rows` is the number of source rows of the sync (`dims.json` = 37 dictionary rows, not the number of items inside the JSON).
+- `kpis.json` keeps `ALL_PLANTS` (725 rows per plant id); every other file holds only HZL_DEMO_01..06 and material types ZSPR and ZSPN.
+- `kpis.json` carries three scenarios: SIMULATED_BASELINE, MODELED_OPPORTUNITY, POC_SCENARIO. Months run 2023-01 to 2025-12 (36). Every figure is simulated; show `manifest.disclaimer`.
+- `plan_vs_actual.json`: `variancePct` is null when the plan value is 0 (1,404 of 5,843 rows). Do not treat null as 0.
+- `reorder.json`: `shutdownId` is null for recommendations that are not shutdown driven (3,222 of 3,916 rows).
+- KPI `catalog` labels, directions and definitions are written explicitly in `scripts/build_data.py`; `uom` comes from the source.
+- `forecast.json` and `forecast_holdout.json` are produced by the FORECAST ticket (PR #2); `manifest.forecast` is null until then.
+- Every SQL statement behind these files is in `work/sql/` (01 to 06).

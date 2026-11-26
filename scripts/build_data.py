@@ -38,20 +38,35 @@ def dump(name, obj):
         json.dump(obj, f, separators=(",", ":"), ensure_ascii=False)
 
 
-LOWER = ("excess", "non_moving", "non-moving", "slow_moving", "slow-moving", "obsolete", "backorder", "stockout",
-         "understock", "delayed", "days_on_hand", "days_excess", "value", "shortage")
-HIGHER = ("turnover", "availability", "potential", "target_reduction", "opportunity", "reduction")
-
-
-def direction(code):
-    c = code.lower()
-    if any(k in c for k in HIGHER):
-        return "higher_is_better"
-    if any(k in c for k in ("po_", "pr_", "consumption", "count", "volume")) and not any(k in c for k in LOWER[:-2]):
-        return "neutral"
-    if any(k in c for k in LOWER):
-        return "lower_is_better"
-    return "neutral"
+# code -> (label, direction, definition). Explicit so the dashboard never relies on a name heuristic.
+L, H, N = "lower_is_better", "higher_is_better", "neutral"
+CATALOG = {
+    "BACKORDER_VALUE_INR": ("Backorder value", L, "Value of demand that could not be filled from stock and is waiting on supply."),
+    "CONSUMPTION_VALUE_INR": ("Consumption value", N, "Value of spares and stores issued to consumption in the month."),
+    "CRITICAL_SPARE_AVAILABILITY_PCT": ("Critical spare availability", H, "Share of critical spares that are available on the shelf when needed."),
+    "DAYS_ON_HAND": ("Days on hand", L, "Days of average consumption covered by the stock on hand."),
+    "DELAYED_PO_COUNT": ("Delayed purchase orders", L, "Number of open purchase orders past their promised delivery date."),
+    "DUPLICATE_SKU_OPPORTUNITY_INR": ("Duplicate SKU opportunity", H, "Modelled inventory value that could be released by consolidating duplicate material codes."),
+    "EXCESS_INVENTORY_VALUE_INR": ("Excess inventory value", L, "Value of stock above the maximum stock level."),
+    "GROSS_INVENTORY_VALUE_INR": ("Gross inventory value", L, "Total value of stock on hand before any adjustment."),
+    "INVENTORY_TURNOVER_RATIO": ("Inventory turnover", H, "Annualised consumption value divided by average inventory value."),
+    "NON_MOVING_VALUE_INR": ("Non-moving inventory value", L, "Value of stock with no consumption within the non-moving threshold."),
+    "OBSOLETE_VALUE_INR": ("Obsolete inventory value", L, "Value of stock classified as obsolete."),
+    "OPEN_PO_QTY": ("Open PO quantity", N, "Quantity on purchase orders not yet fully received."),
+    "OPEN_PO_VALUE_INR": ("Open PO value", N, "Value of purchase orders not yet fully received."),
+    "OPEN_PR_COUNT": ("Open requisitions", N, "Number of purchase requisitions not yet converted to purchase orders."),
+    "OPEN_PR_QTY": ("Open PR quantity", N, "Quantity on purchase requisitions not yet converted to purchase orders."),
+    "POTENTIAL_INVENTORY_REDUCTION_INR": ("Potential inventory reduction", H, "Modelled value of inventory that could be reduced without raising stockout risk."),
+    "POTENTIAL_INVENTORY_REDUCTION_PCT": ("Potential inventory reduction %", H, "Modelled inventory reduction potential as a share of gross inventory value."),
+    "PO_COUNT": ("Purchase orders", N, "Number of purchase orders raised in the month."),
+    "PO_VALUE_INR": ("Purchase order value", N, "Value of purchase orders raised in the month."),
+    "PR_COUNT": ("Purchase requisitions", N, "Number of purchase requisitions raised in the month."),
+    "SLOW_MOVING_VALUE_INR": ("Slow-moving inventory value", L, "Value of stock with low consumption relative to the stock held."),
+    "STOCKOUT_MATERIAL_COUNT": ("Stockout materials", L, "Number of materials with zero available stock and demand."),
+    "TARGET_INVENTORY_REDUCTION_PCT": ("Target inventory reduction %", H, "Reduction target set for the scenario as a share of gross inventory value."),
+    "UNDERSTOCK_MATERIAL_COUNT": ("Understock materials", L, "Number of materials below their safety stock level."),
+    "WORKING_CAPITAL_OPPORTUNITY_INR": ("Working-capital opportunity", H, "Modelled working capital that could be released by the recommended actions."),
+}
 
 
 def build_dims(d):
@@ -72,9 +87,11 @@ def build_dims(d):
 def build_kpis(k):
     codes = sorted({r["KPI_CODE"] for r in k})
     uom = {r["KPI_CODE"]: r["KPI_UOM"] for r in k}
-    catalog = [{"code": c, "label": c.replace("_", " ").title(), "uom": uom[c], "direction": direction(c),
-                "definition": f"Monthly {c.replace('_', ' ').lower()} as published by INVENTORY_KPI_MONTHLY."}
-               for c in codes]
+    missing = [c for c in codes if c not in CATALOG]
+    if missing:
+        raise SystemExit(f"KPI codes without catalog entry: {missing}")
+    catalog = [{"code": c, "label": CATALOG[c][0], "uom": uom[c], "direction": CATALOG[c][1],
+                "definition": CATALOG[c][2]} for c in codes]
     out = [{"month": month(r["MONTH"]), "plantId": r["PLANT_ID"], "kpiCode": r["KPI_CODE"],
             "value": num(r["KPI_VALUE"]), "scenario": r["SCENARIO"]} for r in k]
     return {"catalog": catalog, "rows": out}
@@ -90,7 +107,7 @@ def main():
     now = dt.datetime.now(dt.timezone.utc).isoformat()
     dims, disclaimer, asof = build_dims(rows(f"{csvdir}/dims.csv"))
     dump("dims.json", dims)
-    counts = {"dims.json": sum(len(v) for v in dims.values())}
+    counts = {"dims.json": len(rows(f"{csvdir}/dims.csv"))}  # source rows (37), as in work/sql/01 header
     kp = build_kpis(rows(f"{csvdir}/kpis.csv"))
     dump("kpis.json", kp)
     counts["kpis.json"] = len(kp["rows"])
