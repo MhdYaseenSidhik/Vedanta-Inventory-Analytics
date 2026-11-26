@@ -48,7 +48,7 @@ CATALOG = {
     "DELAYED_PO_COUNT": ("Delayed purchase orders", L, "Number of open purchase orders past their promised delivery date."),
     "DUPLICATE_SKU_OPPORTUNITY_INR": ("Duplicate SKU opportunity", H, "Modelled inventory value that could be released by consolidating duplicate material codes."),
     "EXCESS_INVENTORY_VALUE_INR": ("Excess inventory value", L, "Value of stock above the maximum stock level."),
-    "GROSS_INVENTORY_VALUE_INR": ("Gross inventory value", L, "Total value of stock on hand before any adjustment."),
+    "GROSS_INVENTORY_VALUE_INR": ("Gross inventory value", N, "Total value of stock on hand before any adjustment."),
     "INVENTORY_TURNOVER_RATIO": ("Inventory turnover", H, "Annualised consumption value divided by average inventory value."),
     "NON_MOVING_VALUE_INR": ("Non-moving inventory value", L, "Value of stock with no consumption within the non-moving threshold."),
     "OBSOLETE_VALUE_INR": ("Obsolete inventory value", L, "Value of stock classified as obsolete."),
